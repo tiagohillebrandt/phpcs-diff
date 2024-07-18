@@ -19,15 +19,18 @@ This project also depends on `squizlabs/php_codesniffer` which is used internall
 Finally, the `league/climate` package is also installed. This is to deal with console output, but this dependency may be removed in a future release.
 
 ## Installation
-The recommended method of installing this library is via [Composer](https://getcomposer.org/).
-
 ### Composer
-
-If you use Composer, you can install phpcs-diff system-wide with the following command:
+If you use Composer, you can install `phpcs-diff` system-wide with the following command:
 
 ```shell
-composer global require "tiagohillebrandt/phpcs-diff=*"
+composer global require tiagohillebrandt/phpcs-diff
 ```
+
+It's also possible to install `phpcs-diff` as a development dependency in your project:
+
+```shell
+composer require tiagohillebrandt/phpcs-diff
+````
 
 Or alternatively, include a dependency for `tiagohillebrandt/phpcs-diff` in your `composer.json` file. For example:
 
