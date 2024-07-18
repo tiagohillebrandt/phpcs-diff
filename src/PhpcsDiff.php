@@ -232,7 +232,7 @@ class PhpcsDiff
             $this->climate->info('Using phpcs executable: ' . $exec);
         }
 
-        $exec = PHP_BINARY . ' ' . $exec;
+        $exec = escapeshellarg( PHP_BINARY ) . ' ' . $exec;
         $command = $exec . ' --report=json --standard=' . $this->standard . ' ' . implode(' ', $files);
         $output = shell_exec($command);
 
