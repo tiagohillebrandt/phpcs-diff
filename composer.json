@@ -1,5 +1,5 @@
 {
-    "name": "olivertappin/phpcs-diff",
+    "name": "tiagohillebrandt/phpcs-diff",
     "description": "Detects violations of a defined coding standard based on a git diff.",
     "require": {
         "php": "^7.3 || ^8.0",
