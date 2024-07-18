@@ -42,11 +42,6 @@ class PhpcsDiff
     protected $currentBranch = '';
 
     /**
-     * @var string
-     */
-    protected $standard = 'ruleset.xml';
-
-    /**
      * @param array $argv
      * @param CLImate $climate
      */
@@ -55,16 +50,9 @@ class PhpcsDiff
         $this->argv = $argv;
         $this->climate = $climate;
 
-        if ($this->getFlag('-v')) {
+        if ($this->isFlagSet('-v')) {
             $this->climate->comment('Running in verbose mode.');
             $this->isVerbose = true;
-        }
-
-        $standard = $this->getFlag('--standard');
-        if (!empty($standard) && is_string($standard)) {
-            $this->climate->comment('Custom standard: ' . $standard . PHP_EOL);
-
-            $this->standard = $standard;
         }
 
         if (!isset($this->argv[1])) {
@@ -82,28 +70,23 @@ class PhpcsDiff
 
     /**
      * @param string $flag
-     * @return bool|string
+     * @return bool
      */
-    protected function getFlag(string $flag)
+    protected function isFlagSet(string $flag)
     {
-        $return = false;
+        $isFlagSet = false;
         $argv = $this->argv;
 
-        foreach ($argv as $key => $arg) {
-            if (strtok($arg, '=') === $flag) {
-                $return = !empty(strrchr($arg, '=')) ? substr(strrchr($arg, '='), 1) : true;
+        $key = array_search($flag, $argv, true);
+        if (false !== $key) {
+            unset($argv[$key]);
+            $argv = array_values($argv);
 
-                unset($argv[$key]);
-
-                break;
-            }
+            $isFlagSet = true;
         }
 
-        if ($return) {
-            $this->argv = array_values($argv);
-        }
-
-        return $return;
+        $this->argv = $argv;
+        return $isFlagSet;
     }
 
     /**
@@ -124,6 +107,7 @@ class PhpcsDiff
 
     /**
      * @todo Automatically look at server envs for the travis base branch, if not provided?
+     * @todo Define custom ruleset from command line argv for runPhpcs()
      */
     public function run(): void
     {
@@ -200,9 +184,10 @@ class PhpcsDiff
      * Run phpcs on a list of files passed into the method
      *
      * @param array $files
+     * @param string $ruleset
      * @return mixed
      */
-    protected function runPhpcs(array $files = [])
+    protected function runPhpcs(array $files = [], string $ruleset = 'ruleset.xml')
     {
         $exec = null;
         $root = dirname(__DIR__);
@@ -233,7 +218,7 @@ class PhpcsDiff
         }
 
         $exec = PHP_BINARY . ' ' . $exec;
-        $command = $exec . ' --report=json --standard=' . $this->standard . ' ' . implode(' ', $files);
+        $command = $exec . ' --report=json --standard=' . $ruleset . ' ' . implode(' ', $files);
         $output = shell_exec($command);
 
         if ($this->isVerbose) {

@@ -1,57 +1,72 @@
-[![Latest Version](https://img.shields.io/github/tag/olivertappin/phpcs-diff.svg?style=flat&label=release)](https://github.com/olivertappin/phpcs-diff/tags)
+# phpcs-diff
+
+`phpcs-diff` detects violations of a defined set of coding standards based on a `git diff`.
+
+<div aria-hidden="true">
+
+[![Latest Stable Version](https://img.shields.io/github/v/tag/tiagohillebrandt/phpcs-diff.svg?style=flat&label=release)](https://github.com/tiagohillebrandt/phpcs-diff/tags)
+![Minimum PHP Version](https://img.shields.io/packagist/php-v/tiagohillebrandt/phpcs-diff.svg?cacheSeconds=3600)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
-[![Build Status](https://travis-ci.org/olivertappin/phpcs-diff.svg?branch=master)](https://travis-ci.org/olivertappin/phpcs-diff)
-[![Quality Score](https://img.shields.io/scrutinizer/g/olivertappin/phpcs-diff.svg?style=flat)](https://scrutinizer-ci.com/g/olivertappin/phpcs-diff)
-[![GitHub issues](https://img.shields.io/github/issues/olivertappin/phpcs-diff.svg)](https://github.com/olivertappin/phpcs-diff/issues)
-[![Total Downloads](https://img.shields.io/packagist/dt/olivertappin/phpcs-diff.svg?style=flat)](https://packagist.org/packages/olivertappin/phpcs-diff)
+[![GitHub Issues](https://img.shields.io/github/issues/tiagohillebrandt/phpcs-diff.svg)](https://github.com/tiagohillebrandt/phpcs-diff/issues)
+
+</div>
+
+## Requirements
+The latest version of `phpcs-diff` requires PHP version 7.3.0 or later.
+
+This project also depends on `squizlabs/php_codesniffer` which is used internally to fetch the failed violations via `phpcs`.
+
+Finally, the `league/climate` package is also installed. This is to deal with console output, but this dependency may be removed in a future release.
 
 ## Installation
-
 The recommended method of installing this library is via [Composer](https://getcomposer.org/).
 
 ### Composer
 
-#### Global Installation
+If you use Composer, you can install phpcs-diff system-wide with the following command:
 
-Run the following command from your project root:
+```shell
+composer global require "tiagohillebrandt/phpcs-diff=*"
+```
 
-    composer global require olivertappin/phpcs-diff
-
-#### Manual Installation
-
-Alternatively, you can manually include a dependency for `olivertappin/phpcs-diff` in your `composer.json` file. For example:
+Or alternatively, include a dependency for `tiagohillebrandt/phpcs-diff` in your `composer.json` file. For example:
 
 ```json
 {
     "require-dev": {
-        "olivertappin/phpcs-diff": "^2.0"
+        "tiagohillebrandt/phpcs-diff": "^3.0"
     }
 }
 ```
 
-And run `composer update olivertappin/phpcs-diff`.
+You will then be able to run phpcs-diff from the vendor bin directory:
+
+```shell
+./vendor/bin/phpcs-diff
+```
 
 ### Git Clone
-
 You can also download the `phpcs-diff` source and create a symlink to your `/usr/bin` directory:
 
-    git clone https://github.com/olivertappin/phpcs-diff.git
-    ln -s phpcs-diff/bin/phpcs-diff /usr/bin/phpcs-diff
-    cd /var/www/project
-    phpcs-diff master -v
+```shell
+git clone https://github.com/tiagohillebrandt/phpcs-diff.git
+cd phpcs-diff
+php bin/phpcs-diff main -v
+```
 
-## Usage
+You could also add a
+
+## Getting Started
 
 ### Basic Usage
-
 ```shell
 phpcs-diff <current-branch> <base-branch> -v
 ```
 
-Where the current branch you are on is the branch you are comparing with, and `develop` is the base branch. In this example, `phpcs-diff` would run the following diff statement behind the scenes:
+In this example, the current branch is compared to the `main` branch. `phpcs-diff` would execute the following diff statement behind the scenes:
 
 ```shell
-git diff my-current-branch develop
+git diff current-branch main
 ```
 
 _Please note:_
@@ -71,52 +86,17 @@ module/Poject/src/Console/Script.php
 
 Currently this is the only supported format however, I will look into adding additional formats (much like `phpcs`) in the near future.
 
-### Travis CI Usage
-
-To use this as part of your CI/CD pipeline, create a script with the following:
-
-```bash
-#!/bin/bash
-set -e
-if [ ! -z "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
-  git fetch `git config --get remote.origin.url` $TRAVIS_BRANCH\:refs/remotes/origin/$TRAVIS_BRANCH;
-  composer global require olivertappin/phpcs-diff;
-  ~/.composer/vendor/bin/phpcs-diff $TRAVIS_BRANCH;
-else
-  echo "This test does not derive from a pull-request."
-  echo "Unable to run phpcs-diff (as there's no diff)."
-
-  # Here you might consider running phpcs instead:
-  # composer global require squizlabs/php_codesniffer;
-  # ~/.composer/vendor/bin/phpcs .
-fi;
-```
-
-Which will allow you to run `phpcs-diff` against the diff of your pull-request.
-
-Here's a sample of how this might look within Travis CI:
-
-![Travis CI Example](https://user-images.githubusercontent.com/9773040/70551339-43bcfc00-1b6f-11ea-90c7-bc660e8dea28.png)
-
 ## About
-`phpcs-diff` detects violations of a defined set of coding standards based on a `git diff`. It uses `phpcs` from the [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) project.
+`phpcs-diff` detects violations of a defined set of coding standards based on a `git diff`. It uses `phpcs` from the [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer/) project.
 
-This project helps by achieving the following:
-- Speeds up your CI/CD pipeline validating changed files only, rather than the whole code base.
-- Allows you to migrate legacy code bases that cannot risk changing everything at once to become fully compliant to a coding standard.
+This project offers the following benefits:
+- Accelerates your CI/CD pipeline by validating only the modified files instead of the entire codebase.
+- Facilitates the migration of legacy codebases, enabling incremental compliance with coding standards without the risk of extensive changes at once.
 
-This executable works by only checking the changed lines, compared to the base branch, against all failed violations for those files, so you can be confident that any new or changed code will be compliant.
+This executable works by checking the changed lines, compared to the base branch, against all failed violations for those files. This ensures that any new or changed code will be compliant.
 
-This will hopefully put you in a position where your codebase will become more compliant to that coding standard over time, and maybe you will find the resource to eventually change everything, and just run `phpcs` on its own.
+Over time, this approach will help your codebase become more compliant with the coding standard, and you may eventually reach a point where you can run `phpcs` on the entire codebase.
 
-## Requirements
-
-The latest version of `phpcs-diff` requires PHP version 5.6.0 or later.
-
-This project also depends on `squizlabs/php_codesniffer` which is used internally to fetch the failed violations via `phpcs`.
-
-Finally, the `league/climate` package is also installed. This is to deal with console output, but this dependency may be removed in a future release.
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for information.
+### Fork
+This project is derived from the **olivertappin/phpcs-diff** library.
+It was created to ensure more frequent updates, as the original repository appears to be abandoned.
