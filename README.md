@@ -77,9 +77,9 @@ git diff current-branch main
 ```
 
 _Please note:_
-- The `-v` flag is optional. This returns a verbose output during processing.
-- The `current-branch` parameter is optional. If this is not defined, `phpcs-diff` will use the current commit hash via `git rev-parse --verify HEAD`.
-- You must have a `ruleset.xml` defined in your project base directory.
+- The `-v` flag is optional and provides verbose output during processing.
+- The `current-branch` parameter is optional. If not specified, `phpcs-diff` will use the current commit hash obtained via `git rev-parse --verify HEAD`.
+- By default, `phpcs-diff` looks for the `ruleset.xml` file in the root directory of the project. To use a different ruleset file or standard, specify it using the `--standard` option.
 
 After running `phpcs-diff`, the executable will return an output similar to the following:
 
@@ -91,7 +91,22 @@ module/Poject/src/Console/Script.php
 ########### END OF PHPCS CHECK ###########
 ```
 
-Currently this is the only supported format however, I will look into adding additional formats (much like `phpcs`) in the near future.
+### Custom Standards and Ruleset Files
+`phpcs-diff` allows you to specify custom coding standards and ruleset files to suit your needs. For example, to use a predefined standard like PSR-12, you can run:
+
+```shell
+phpcs-diff --standard=PSR12 main
+```
+
+You can find a list of available standards in [PHP_CodeSniffer's GitHub repository](https://github.com/PHPCSStandards/PHP_CodeSniffer/tree/master/src/Standards).
+
+To apply a custom ruleset file, simply use:
+
+```shell
+phpcs-diff --standard=phpcs.xml.dist main
+```
+
+These options let you customize the code analysis to align with your specific coding standards and project requirements.
 
 ## About
 `phpcs-diff` detects violations of a defined set of coding standards based on a `git diff`. It uses `phpcs` from the [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer/) project.
