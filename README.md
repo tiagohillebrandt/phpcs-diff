@@ -29,10 +29,10 @@ composer global require tiagohillebrandt/phpcs-diff
 It's also possible to install `phpcs-diff` as a development dependency in your project:
 
 ```shell
-composer require tiagohillebrandt/phpcs-diff
+composer require --dev tiagohillebrandt/phpcs-diff
 ````
 
-Or alternatively, include a dependency for `tiagohillebrandt/phpcs-diff` in your `composer.json` file. For example:
+Or alternatively, you can manually include a dependency for `tiagohillebrandt/phpcs-diff` in your `composer.json` file. For example:
 
 ```json
 {
