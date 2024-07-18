@@ -5,7 +5,7 @@
 <div aria-hidden="true">
 
 [![Latest Stable Version](https://img.shields.io/github/v/tag/tiagohillebrandt/phpcs-diff.svg?style=flat&label=release)](https://github.com/tiagohillebrandt/phpcs-diff/tags)
-![Minimum PHP Version](https://img.shields.io/packagist/php-v/tiagohillebrandt/phpcs-diff.svg?cacheSeconds=3600)
+![Minimum PHP Version](https://img.shields.io/packagist/dependency-v/tiagohillebrandt/phpcs-diff/php.svg?cacheSeconds=3600)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
 [![GitHub Issues](https://img.shields.io/github/issues/tiagohillebrandt/phpcs-diff.svg)](https://github.com/tiagohillebrandt/phpcs-diff/issues)
 
