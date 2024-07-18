@@ -1,6 +1,8 @@
 {
     "name": "tiagohillebrandt/phpcs-diff",
     "description": "Detects coding standard violations based on a git diff.",
+    "homepage": "https://github.com/tiagohillebrandt/phpcs-diff",
+    "license": "MIT",
     "require": {
         "php": ">=7.3.0",
         "ext-json": "*",
