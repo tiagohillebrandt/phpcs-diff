@@ -54,7 +54,11 @@ cd phpcs-diff
 php bin/phpcs-diff main -v
 ```
 
-You could also add a
+You could also add a symlink to your `/usr/bin` directory:
+
+```shell
+ln -s phpcs-diff/bin/phpcs-diff /usr/bin/phpcs-diff
+```
 
 ## Getting Started
 
