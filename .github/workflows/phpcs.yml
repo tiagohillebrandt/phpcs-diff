@@ -1,0 +1,30 @@
+name: phpcs-diff coding standards
+
+on:
+  pull_request:
+
+jobs:
+  phpcs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Setup PHP 7.4 and disable opcache
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: :opcache
+
+      - name: Composer
+        run: composer install
+
+      - name: Check coding standards
+        run: |
+          git checkout main
+          git checkout -
+          composer run phpcs $(git diff --name-only main..${{ github.head_ref }} -- '*.php')
