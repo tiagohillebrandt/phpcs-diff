@@ -13,7 +13,6 @@
     },
     "require-dev": {
         "ext-mbstring": "*",
-        "ext-phar": "*",
         "phpunit/phpunit": "^7.5.20 || ^8.5.21 || ^9.5.10",
         "phpunit/php-code-coverage": "^9.2",
         "phpcompatibility/php-compatibility": "^9.3",

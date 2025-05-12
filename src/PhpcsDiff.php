@@ -204,25 +204,7 @@ class PhpcsDiff
      */
     protected function runPhpcs(array $files = [])
     {
-        $exec = null;
-        $root = dirname(__DIR__);
-
-        $locations = [
-            'vendor/bin/phpcs',
-            $root . '/../../bin/phpcs',
-            $root . '/../bin/phpcs',
-            $root . '/bin/phpcs',
-            $root . '/vendor/bin/phpcs',
-            '~/.config/composer/vendor/bin/phpcs',
-            '~/.composer/vendor/bin/phpcs',
-        ];
-
-        foreach ($locations as $location) {
-            if (is_file($location)) {
-                $exec = $location;
-                break;
-            }
-        }
+        $exec = $this->findPhpcsBinaryPath();
 
         if (!$exec) {
             return null;
@@ -240,6 +222,10 @@ class PhpcsDiff
             $this->climate->info('Running: ' . $command);
         }
 
+        // Removes everything before the first curly brace.
+        $output = preg_replace('/^[^{]*({.*)/s', '$1', $output);
+
+        // Decode the JSON output.
         $json = $output ? json_decode($output, true) : null;
         if ($json === null && $output) {
             $this->climate->error($output);
@@ -336,5 +322,36 @@ class PhpcsDiff
     {
         $this->climate->error($message);
         $this->setExitCode($exitCode);
+    }
+
+    /**
+     * Get the path to the phpcs binary.
+     *
+     * @since 3.0.1
+     *
+     * @return string|null
+     */
+    private function findPhpcsBinaryPath()
+    {
+        $exec = null;
+        $root = dirname(__DIR__);
+
+        $locations = [
+            'vendor/bin/phpcs',
+            $root . '/../../bin/phpcs',
+            $root . '/../bin/phpcs',
+            $root . '/bin/phpcs',
+            $root . '/vendor/bin/phpcs',
+            '~/.config/composer/vendor/bin/phpcs',
+            '~/.composer/vendor/bin/phpcs',
+        ];
+
+        foreach ($locations as $location) {
+            if (is_file($location)) {
+                return $location;
+            }
+        }
+
+        return null;
     }
 }
